@@ -25,21 +25,21 @@ router.post("/admin/signup", validateSignupRequest, isRequestValidated, signup);
 router.post("/admin/signin", validateSigninRequest, isRequestValidated, signin);
 router.post("/admin/signout", signout);
 
-router.get("/admin/all-admin", requireSignin, adminMiddleware, getListAdmin);
+router.get("/admin/all", requireSignin, adminMiddleware, getListAdmin);
 router.delete(
-  "/admin/delete-admin",
+  "/admin/delete/:id",
   requireSignin,
   superAdminMiddleware,
   deleteAdminById
 );
 router.put(
-  "/admin/change-information",
+  "/admin/:id/change-information",
   requireSignin,
   adminMiddleware,
   changeInformation
 );
 router.put(
-  "/admin/change-password",
+  "/admin/:id/change-password",
   requireSignin,
   adminMiddleware,
   changePassword

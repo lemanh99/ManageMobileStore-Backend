@@ -126,8 +126,8 @@ exports.getListAdmin = (req, res) => {
 exports.deleteAdminById = (req, res) => {
   try {
     // console.log(req.body)
-    const { id } = req.body;
-  
+    const { id } = req.params;
+
     if (id) {
       Admin.deleteOne({ _id: id }).exec((error, result) => {
         if (error) return res.status(400).json({ error });
@@ -147,7 +147,8 @@ exports.deleteAdminById = (req, res) => {
 
 exports.changeInformation = async (req, res) => {
   try {
-    const { id, firstName, lastName } = req.body.data;
+    const { id } = req.params;
+    const {firstName, lastName } = req.body.data;
     if (id) {
       const updateAdmin = await Admin.findOneAndUpdate(
         { _id: id },
@@ -176,7 +177,8 @@ exports.changeInformation = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    const { id, password } = req.body.data;
+    const { id } = req.params;
+    const { password } = req.body.data;
     if (id) {
       const hash_password = await bcrypt.hash(password, 10);
       const updateAdmin = await Admin.findOneAndUpdate(
@@ -192,5 +194,3 @@ exports.changePassword = async (req, res) => {
     return res.status(400).json({ error: "No connected" });
   }
 };
-
-

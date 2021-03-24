@@ -21,6 +21,6 @@ router.post(
 );
 router.post("/signin", validateSigninRequest, isRequestValidated, signin);
 router.get("/customer/all", requireSignin, adminMiddleware, getAllCustomer);
-router.put("/customer/status", requireSignin, adminMiddleware, blockCustomer);
+router.put("/customer/:id/status", requireSignin, adminMiddleware, blockCustomer);
 
 module.exports = router;

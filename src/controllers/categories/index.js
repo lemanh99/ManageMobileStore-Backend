@@ -47,7 +47,7 @@ exports.getCategories = (req, res) => {
 
 exports.deleteCategory = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     if (id) {
       Category.deleteOne({ _id: id }).exec((error, result) => {
         if (error) return res.status(400).json({ error });
@@ -66,7 +66,7 @@ exports.deleteCategory = async (req, res) => {
 };
 
 exports.updateCategory = async (req, res) => {
-  const _id = req.body._id;
+  const { id } = req.params;
   const category = {
     name: req.body.name,
     slug: req.body.name
@@ -76,10 +76,14 @@ exports.updateCategory = async (req, res) => {
   if (req.file) {
     category.categoryImage = req.file.filename;
   }
-  if (_id) {
-    const updatedCategory = await Category.findOneAndUpdate({ _id }, category, {
-      new: true,
-    });
+  if (id) {
+    const updatedCategory = await Category.findOneAndUpdate(
+      { _id: id },
+      category,
+      {
+        new: true,
+      }
+    );
     return res.status(201).json({ updatedCategory });
   } else {
     return res.status(400).json({ error: "No ID" });

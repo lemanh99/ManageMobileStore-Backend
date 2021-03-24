@@ -26,9 +26,9 @@ router.post(
   upload.single("brandImage"),
   addBrand
 );
-router.delete("/brand/delete", requireSignin, deleteBrand);
+router.delete("/brand/delete/:id", requireSignin, deleteBrand);
 router.post(
-  "/brand/update",
+  "/brand/update/:id",
   requireSignin,
   upload.single("brandImage"),
   updateBrand

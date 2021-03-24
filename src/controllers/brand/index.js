@@ -47,7 +47,7 @@ exports.getBrands = (req, res) => {
 
 exports.deleteBrand = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     if (id) {
       Brand.deleteOne({ _id: id }).exec((error, result) => {
         if (error) return res.status(400).json({ error });
@@ -66,7 +66,7 @@ exports.deleteBrand = async (req, res) => {
 };
 
 exports.updateBrand = async (req, res) => {
-  const _id = req.body._id;
+  const id = req.params;
   const brand = {
     name: req.body.name,
     slug: req.body.name
@@ -79,8 +79,8 @@ exports.updateBrand = async (req, res) => {
   if (req.body.categoryId) {
     brand.categoryId = req.body.categoryId;
   }
-  if (_id) {
-    const updatedBrands = await Brand.findOneAndUpdate({ _id }, brand, {
+  if (id) {
+    const updatedBrands = await Brand.findOneAndUpdate({ _id: id }, brand, {
       new: true,
     });
     return res.status(201).json({ updatedBrands });

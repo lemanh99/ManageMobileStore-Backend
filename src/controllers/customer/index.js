@@ -46,8 +46,10 @@ exports.signin = (req, res) => {
     ).exec(async (error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) {
+        
         const isPassword = await user.authenticate(req.body.password);
         if (isPassword) {
+          
           const token = jwt.sign(
             {
               _id: user._id,
@@ -112,7 +114,7 @@ exports.getAllCustomer = (req, res) => {
 };
 exports.blockCustomer = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     if (id) {
       const status_block = await Customer.findOneAndUpdate(
         { _id: id, status: "block" },
