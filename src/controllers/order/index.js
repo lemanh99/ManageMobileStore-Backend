@@ -44,11 +44,10 @@ exports.addOrder = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-  Order.find({})
-  .exec((error, orders) => {
+  Order.find({}).exec((error, orders) => {
     if (error) return res.status(400).json({ error });
     if (orders) {
-      res.status(200).json({ orders });
+      res.status(200).json({ data: orders });
     }
   });
 };

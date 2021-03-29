@@ -1,0 +1,244 @@
+{
+    "routes": [
+        {
+            "admin": [
+                {
+                    "method": "POST",
+                    "path": "/admin/signup",
+                    "handler": "admin.signup",
+                    "config": {
+                        "policies": [
+                            "validateSignupRequest",
+                            "isRequestValidated"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/admin/signin",
+                    "handler": "admin.signin",
+                    "config": {
+                        "policies": [
+                            "validateSignupRequest",
+                            "isRequestValidated"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/admin/signout",
+                    "handler": "admin.signout",
+                    "config": {
+                        "policies": []
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/admin/all",
+                    "handler": "admin.getListAdmin",
+                    "config": {
+                        "policies": [
+                            "requireSignin",
+                            "adminMiddleware"
+                        ]
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/admin/delete/:id",
+                    "handler": "admin.deleteAdminById",
+                    "config": {
+                        "policies": [
+                            "requireSignin",
+                            "superAdminMiddleware"
+                        ]
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "path": "/admin/:id/change-information",
+                    "handler": "admin.changeInformation",
+                    "config": {
+                        "policies": [
+                            "requireSignin",
+                            "adminMiddleware"
+                        ]
+                    }
+                },
+                {
+                    "method": "PUT",
+                    "handler": "admin.changeInformation",
+                    "config": {
+                        "policies": [
+                            "change-password",
+                            "changePassword"
+                        ]
+                    }
+                }
+            ],
+            "customer": [
+                {
+                    "method": "POST",
+                    "path": "/signup",
+                    "handler": "customer.signup",
+                    "config": {
+                        "policies": [
+                            "validateSignupForUserRequest",
+                            "isRequestValidated"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/signin",
+                    "handler": "customer.signin",
+                    "config": {
+                        "policies": [
+                            "validateSigninRequest",
+                            "isRequestValidated"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/signout",
+                    "handler": "customer.signout",
+                    "config": {
+                        "policies": []
+                    }
+                },
+                {
+                    "method": "GET",
+                    "path": "/customer/all",
+                    "handler": "customer.getAllCustomer",
+                    "config": {
+                        "policies": [
+                            "requireSignin",
+                            "adminMiddleware"
+                        ]
+                    }
+                }
+            ],
+            "category": [
+                {
+                    "method": "GET",
+                    "path": "/category/all",
+                    "handler": "category.getCategories",
+                    "config": {
+                        "policies": []
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/category/create",
+                    "handler": "category.addCategory",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/category/update/:id",
+                    "handler": "category.updateCategory",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/category/delete/:id",
+                    "handler": "category.deleteCategory",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                }
+            ],
+            "brand": [
+                {
+                    "method": "GET",
+                    "path": "/brand/all",
+                    "handler": "brand.getBrands",
+                    "config": {
+                        "policies": []
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/brand/create",
+                    "handler": "brand.addBrand",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/brand/update/:id",
+                    "handler": "brand.updateBrand",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/brand/delete/:id",
+                    "handler": "brand.deleteBrand",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                }
+            ],
+            "product": [
+                {
+                    "method": "GET",
+                    "path": "/product/all",
+                    "handler": "product.getProducts",
+                    "config": {
+                        "policies": []
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/product/create",
+                    "handler": "product.createProduct",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                },
+                {
+                    "method": "POST",
+                    "path": "/product/update/:id",
+                    "handler": "product.updateProduct",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                },
+                {
+                    "method": "DELETE",
+                    "path": "/product/delete/:id",
+                    "handler": "product.deleteProductById",
+                    "config": {
+                        "policies": [
+                            "requireSignin"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -4,7 +4,8 @@ const orderSchema = new mongoose.Schema(
   {
     codeBill: {
       type: String,
-      default: "MDH"+shortid.generate(),
+      default: "ORD" + shortid.generate()+Math.floor(Math.random()*100000).toString(),
+      unique: true,
     },
     customerId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -41,13 +42,13 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "completed", "cancelled", "refund"],
       required: true,
-      default:"pending"
+      default: "pending",
     },
     paymentType: {
       type: String,
       enum: ["cod", "card"],
       required: true,
-      default:"cod"
+      default: "cod",
     },
     orderStatus: [
       {
