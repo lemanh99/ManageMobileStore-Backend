@@ -13,7 +13,7 @@ const brandRoutes = require("./src/routes/brand");
 //environment variable
 env.config();
 
-const port = process.env.PORT || 80;
+const port = 80;
 const app = express();
 
 //connect mongodb
