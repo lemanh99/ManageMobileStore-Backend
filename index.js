@@ -15,7 +15,7 @@ const orderRoutes = require("./src/routes/order");
 //environment variable
 env.config();
 
-const port = 80;
+const port = process.env.PORT || 80;
 const app = express();
 
 //connect mongodb
