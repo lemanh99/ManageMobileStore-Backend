@@ -9,6 +9,8 @@ const adminRoutes = require("./src/routes/admin");
 const customerRoutes = require("./src/routes/customer");
 const categoryRoutes = require("./src/routes/category");
 const brandRoutes = require("./src/routes/brand");
+const productRoutes = require("./src/routes/product");
+const orderRoutes = require("./src/routes/order");
 
 //environment variable
 env.config();
@@ -38,6 +40,8 @@ app.use("/api", adminRoutes);
 app.use("/api", customerRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", brandRoutes);
+app.use("/api", productRoutes);
+app.use("/api", orderRoutes);
 
 app.listen(port, () => {
   console.log(`Server is listening on port:${port}`);
