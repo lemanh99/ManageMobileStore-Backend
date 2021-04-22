@@ -17,6 +17,8 @@ function createProducts(products) {
       reviewers: product.reviewers,
       brandId: product.brandId,
       productPictures: product.productPictures,
+      updatedAt: product.updatedAt,
+      createdAt: product.createdAt,
     });
   }
   return productList;

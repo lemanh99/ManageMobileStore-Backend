@@ -93,6 +93,7 @@ const listCustomer = (customers) => {
       address: customer.address,
       phoneNumber: customer.phoneNumber,
       profilePicture: customer.profilePicture,
+      createdAt: customer.createdAt
     });
   }
   return list_customer;
