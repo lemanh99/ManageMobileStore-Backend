@@ -53,7 +53,8 @@ exports.getOrders = (req, res) => {
 };
 
 exports.getOrdersByCustomers = (req, res) => {
-  Order.find({ customerId: req.customer._id })
+  const { id } = req.params;
+  Order.find({ customerId: id })
     .select("_id codeBill paymentStatus paymentType orderStatus productDetail")
     .populate("productDetail.productId", "_id name productPictures")
     .exec((error, orders) => {

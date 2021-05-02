@@ -3,8 +3,9 @@ const { addOrder,  getOrder, getOrders, getOrdersByCustomers } = require("../../
 
 const router = require("express").Router();
 
+
 router.post("/addOrder", requireSigninCustomer, addOrder);
-router.get("/getOrders", requireSigninCustomer, getOrdersByCustomers);
+router.get("/order/:id", requireSigninCustomer, getOrdersByCustomers);
 router.get("/order/all", requireSignin, getOrders);
 router.post("/getOrder", requireSigninCustomer, getOrder);
 
