@@ -98,6 +98,19 @@ exports.getProductDetailsById = (req, res) => {
   }
 };
 
+exports.getProductDetailsByBrand = (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    Product.find({ brandId: id }).exec((error, product) => {
+      if (error) return res.status(400).json({ error });
+      if (product) {
+        res.status(200).json({ data: product });
+      }
+    });
+  } else {
+    return res.status(400).json({ error: "Params required" });
+  }
+};
 // new update
 exports.updateProduct = async (req, res) => {
   const { id } = req.params;
