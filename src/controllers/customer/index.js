@@ -58,7 +58,7 @@ exports.signin = (req, res) => {
             { expiresIn: "1d" }
           );
           const { _id, firstName, lastName, username, email, fullName } = user;
-          res.cookie("token", token, { expiresIn: "1d" });
+          res.cookie("token-user", token, { expiresIn: "1d" });
           return res.status(200).json({
             token,
             user: { _id, firstName, lastName, username, email, fullName },
@@ -77,6 +77,13 @@ exports.signin = (req, res) => {
   } catch (error) {
     return res.status(400).json({ error });
   }
+};
+
+exports.signout = (req, res) => {
+  res.clearCookie("token-user");
+  res.status(200).json({
+    message: "Signout successfully!",
+  });
 };
 
 const listCustomer = (customers) => {
