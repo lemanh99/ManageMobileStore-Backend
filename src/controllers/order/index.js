@@ -86,3 +86,73 @@ exports.getOrder = (req, res) => {
       }
     });
 };
+
+exports.confirmDevivered = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    orderStatus = [
+      {
+        type: "ordered",
+        date: new Date(),
+        isCompleted: false,
+      },
+      {
+        type: "packed",
+        isCompleted: false,
+      },
+      {
+        type: "shipped",
+        isCompleted: false,
+      },
+      {
+        type: "delivered",
+        isCompleted: true,
+      },
+    ];
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: id },
+      { paymentStatus: "completed", orderStatus },
+      {
+        new: true,
+      }
+    );
+    return res.status(201).json({ data: updatedOrder });
+  } else {
+    return res.status(400).json({ error: "No ID" });
+  }
+};
+
+exports.confirmCancel = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    orderStatus = [
+      {
+        type: "ordered",
+        date: new Date(),
+        isCompleted: false,
+      },
+      {
+        type: "packed",
+        isCompleted: false,
+      },
+      {
+        type: "shipped",
+        isCompleted: false,
+      },
+      {
+        type: "delivered",
+        isCompleted: false,
+      },
+    ];
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: id },
+      { paymentStatus: "cancelled", orderStatus },
+      {
+        new: true,
+      }
+    );
+    return res.status(201).json({ data: updatedOrder, message:"Cancel completed" });
+  } else {
+    return res.status(400).json({ error: "No ID" });
+  }
+};

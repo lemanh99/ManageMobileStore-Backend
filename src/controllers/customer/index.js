@@ -46,23 +46,34 @@ exports.signin = (req, res) => {
     ).exec(async (error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) {
-        
         const isPassword = await user.authenticate(req.body.password);
         if (isPassword) {
-          
-          const token = jwt.sign(
-            {
-              _id: user._id,
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "1d" }
-          );
-          const { _id, firstName, lastName, username, email, fullName } = user;
-          res.cookie("token-user", token, { expiresIn: "1d" });
-          return res.status(200).json({
-            token,
-            user: { _id, firstName, lastName, username, email, fullName },
-          });
+          if (user.status === "active") {
+            const token = jwt.sign(
+              {
+                _id: user._id,
+              },
+              process.env.JWT_SECRET,
+              { expiresIn: "1d" }
+            );
+            const {
+              _id,
+              firstName,
+              lastName,
+              username,
+              email,
+              fullName,
+            } = user;
+            res.cookie("token-user", token, { expiresIn: "1d" });
+            return res.status(200).json({
+              token,
+              user: { _id, firstName, lastName, username, email, fullName },
+            });
+          }else{
+            return res.status(204).json({
+              error: "The account has been locked"
+            })
+          }
         } else {
           return res
             .status(400)
@@ -100,7 +111,7 @@ const listCustomer = (customers) => {
       address: customer.address,
       phoneNumber: customer.phoneNumber,
       profilePicture: customer.profilePicture,
-      createdAt: customer.createdAt
+      createdAt: customer.createdAt,
     });
   }
   return list_customer;
