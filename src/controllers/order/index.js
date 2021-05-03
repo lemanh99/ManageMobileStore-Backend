@@ -86,6 +86,40 @@ exports.getOrder = (req, res) => {
       }
     });
 };
+exports.confirmShiped = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    orderStatus = [
+      {
+        type: "ordered",
+        isCompleted: false,
+      },
+      {
+        type: "packed",
+        isCompleted: false,
+      },
+      {
+        type: "shipped",
+        date: new Date(),
+        isCompleted: true,
+      },
+      {
+        type: "delivered",
+        isCompleted: false,
+      },
+    ];
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: id },
+      { orderStatus },
+      {
+        new: true,
+      }
+    );
+    return res.status(201).json({ data: updatedOrder });
+  } else {
+    return res.status(400).json({ error: "No ID" });
+  }
+};
 
 exports.confirmDevivered = async (req, res) => {
   const { id } = req.params;
@@ -93,7 +127,6 @@ exports.confirmDevivered = async (req, res) => {
     orderStatus = [
       {
         type: "ordered",
-        date: new Date(),
         isCompleted: false,
       },
       {
@@ -106,6 +139,7 @@ exports.confirmDevivered = async (req, res) => {
       },
       {
         type: "delivered",
+        date: new Date(),
         isCompleted: true,
       },
     ];
@@ -151,7 +185,9 @@ exports.confirmCancel = async (req, res) => {
         new: true,
       }
     );
-    return res.status(201).json({ data: updatedOrder, message:"Cancel completed" });
+    return res
+      .status(201)
+      .json({ data: updatedOrder, message: "Cancel completed" });
   } else {
     return res.status(400).json({ error: "No ID" });
   }
