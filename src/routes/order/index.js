@@ -4,9 +4,9 @@ const { addOrder,  getOrder, getOrders, getOrdersByCustomers, confirmDevivered, 
 const router = require("express").Router();
 
 
-router.post("/addOrder", requireSigninCustomer, addOrder);
-router.get("/order/:id", requireSigninCustomer, getOrdersByCustomers);
 router.get("/order/all", requireSignin, getOrders);
+router.get("/order/:id", requireSigninCustomer, getOrdersByCustomers);
+router.post("/addOrder", requireSigninCustomer, addOrder);
 router.post("/getOrder", requireSigninCustomer, getOrder);
 router.post("/confirm-delivered/:id", requireSigninCustomer, confirmDevivered)
 router.post("/confirm-canceled/:id", requireSigninCustomer, confirmCancel)
