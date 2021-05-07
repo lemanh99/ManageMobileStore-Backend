@@ -156,3 +156,44 @@ exports.blockCustomer = async (req, res) => {
     return res.status(400).json({ error: "No Connected" });
   }
 };
+
+exports.changeInformation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {firstName, lastName, address, phoneNumber } = req.body.data;
+    if (id) {
+      const updateUser = await Customer.findOneAndUpdate(
+        { _id: id },
+        { firstName: firstName, lastName: lastName, address: address, phoneNumber: phoneNumber},
+        { new: true }
+      );
+      return res
+        .status(201)
+        .json({ message: "Update Information Success"});
+    } else {
+      return res.status(400).json({ error: "No ID" });
+    }
+  } catch (error) {
+    return res.status(400).json({ error: "No Connected" });
+  }
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body.data;
+    if (id) {
+      const hash_password = await bcrypt.hash(password, 10);
+      const updateAdmin = await Customer.findOneAndUpdate(
+        { _id: id },
+        { hash_password: hash_password },
+        { new: true }
+      );
+      return res.status(201).json({ message: "Update Passsword Success" });
+    } else {
+      return res.status(400).json({ error: "No ID" });
+    }
+  } catch (error) {
+    return res.status(400).json({ error: "No connected" });
+  }
+};

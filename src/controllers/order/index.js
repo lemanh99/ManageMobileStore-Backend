@@ -1,14 +1,26 @@
 const Order = require("../../models/order");
 const Category = require("../../models/category");
+const Product = require("../../models/product");
 // const Address = require("../models/address");
+const updateQuantityProduct = async (id, quantity) => {
+  if (id) {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: id },
+      { quantity: quantity },
+      {
+        new: true,
+      }
+    );
 
-exports.addOrder = (req, res) => {
-  // Category.deleteOne({ user: req.user._id }).exec((error, result) => {
-  // if (error) return res.status(400).json({ error });
-  // if (result) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+exports.addOrder = async (req, res) => {
   try {
     req.body.customerId = req.customer._id;
-    console.log(req.body.customerId);
     req.body.orderStatus = [
       {
         type: "ordered",
@@ -32,7 +44,17 @@ exports.addOrder = (req, res) => {
     order.save((error, order) => {
       if (error) return res.status(400).json({ error });
       if (order) {
-        res.status(201).json({ order });
+        for (let product of order.productDetail) {
+          Product.findOne({ _id: product.productId }).exec((error, prod) => {
+            if (prod) {
+              updateQuantityProduct(
+                prod._id,
+                prod.quantity - product.purchasedQty
+              );
+            }
+          });
+        }
+        return res.status(201).json({ order });
       }
     });
   } catch (error) {
