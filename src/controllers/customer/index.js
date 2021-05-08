@@ -63,16 +63,27 @@ exports.signin = (req, res) => {
               username,
               email,
               fullName,
+              address,
+              phoneNumber,
             } = user;
             res.cookie("token-user", token, { expiresIn: "1d" });
             return res.status(200).json({
               token,
-              user: { _id, firstName, lastName, username, email, fullName },
+              user: {
+                _id,
+                firstName,
+                lastName,
+                username,
+                email,
+                phoneNumber,
+                address,
+                fullName,
+              },
             });
-          }else{
+          } else {
             return res.status(204).json({
-              error: "The account has been locked"
-            })
+              error: "The account has been locked",
+            });
           }
         } else {
           return res
@@ -160,16 +171,22 @@ exports.blockCustomer = async (req, res) => {
 exports.changeInformation = async (req, res) => {
   try {
     const { id } = req.params;
-    const {firstName, lastName, address, phoneNumber } = req.body.data;
+    const { firstName, lastName, address, phoneNumber } = req.body.data;
     if (id) {
       const updateUser = await Customer.findOneAndUpdate(
         { _id: id },
-        { firstName: firstName, lastName: lastName, address: address, phoneNumber: phoneNumber},
+        {
+          firstName: firstName,
+          lastName: lastName,
+          address: address,
+          phoneNumber: phoneNumber,
+        },
         { new: true }
       );
+      console.log(updateUser);
       return res
         .status(201)
-        .json({ message: "Update Information Success"});
+        .json({ message: "Update Information Success", user: updateUser });
     } else {
       return res.status(400).json({ error: "No ID" });
     }
