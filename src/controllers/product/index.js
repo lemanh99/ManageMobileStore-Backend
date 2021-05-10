@@ -190,3 +190,16 @@ exports.deleteProductById = (req, res) => {
 
 //   res.status(200).json({ products });
 // };
+
+exports.searchProducts = (req, res) => {
+  const name = req.query.name;
+  const query = new RegExp(".*"+name+ ".*");
+  console.log(query);
+  // Product.find({"name": /.*name.*/}).exec((error, product) => {
+  Product.find({ "name": {"$regex":query, "$options": "i"}}).exec((error, product) => {
+    if (error) return res.status(400).json({ error });
+    if (product) {
+      res.status(200).json({ data: product });
+    }
+  });
+};
