@@ -214,3 +214,55 @@ exports.confirmCancel = async (req, res) => {
     return res.status(400).json({ error: "No ID" });
   }
 };
+
+exports.getTopOrders = (req, res) => {
+  try {
+    let start = req.query.start;
+    let end = req.query.end;
+    Order.find({})
+      .select(
+        "_id codeBill paymentStatus paymentType orderStatus productDetail"
+      )
+      .populate(
+        "productDetail.productId",
+        "_id name price discount quantity productPictures"
+      )
+      .exec((error, orders) => {
+        if (error) return res.status(400).json({ error });
+        if (orders) {
+          let listTop = [];
+          for (let order of orders) {
+            console.log(order.productDetail);
+            const status = order.orderStatus.find(
+              (status) => status.isCompleted === true
+            );
+
+            if (status.type === "delivered") {
+              for (let prod of order.productDetail) {
+                var index = listTop.findIndex(
+                  (product) =>
+                    String(product.product) === String(prod.productId)
+                );
+                if (index !== -1) {
+                  listTop[index].sellQuantity =
+                    listTop[index].sellQuantity + prod.purchasedQty;
+                } else {
+                  var obj = {};
+                  obj.product = prod.productId;
+                  obj.sellQuantity = prod.purchasedQty;
+                  listTop.push(obj);
+                }
+              }
+            }
+          }
+          const data = listTop
+            .sort((a, b) => b.value - a.value)
+            .slice(start, end);
+          // console.log(data);
+          res.status(200).json({ data: data });
+        }
+      });
+  } catch (error) {
+    if (error) return res.status(400).json({ error });
+  }
+};

@@ -111,6 +111,31 @@ exports.getProductDetailsByBrand = (req, res) => {
     return res.status(400).json({ error: "Params required" });
   }
 };
+
+exports.getProductDetailsByCategory = (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    Product.find({})
+      .populate({
+        path: "brandId",
+        select: "categoryId",
+        populate: { path: "categoryId", select: "_id" },
+      })
+      .exec((error, product) => {
+        if (error) return res.status(400).json({ error });
+        if (product) {
+          const data = product.filter(
+            (product) => String(product.brandId.categoryId._id) === String(id)
+          );
+
+          res.status(200).json({ data: data });
+        }
+      });
+  } else {
+    return res.status(400).json({ error: "Params required" });
+  }
+};
+
 // new update
 exports.updateProduct = async (req, res) => {
   const { id } = req.params;
