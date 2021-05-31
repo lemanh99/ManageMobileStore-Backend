@@ -232,28 +232,28 @@ exports.getTopOrders = (req, res) => {
         if (orders) {
           let listTop = [];
           for (let order of orders) {
-            console.log(order.productDetail);
             const status = order.orderStatus.find(
               (status) => status.isCompleted === true
             );
-
-            if (status.type === "delivered") {
-              for (let prod of order.productDetail) {
-                var index = listTop.findIndex(
-                  (product) =>
-                    String(product.product) === String(prod.productId)
-                );
-                if (index !== -1) {
-                  listTop[index].sellQuantity =
-                    listTop[index].sellQuantity + prod.purchasedQty;
-                } else {
-                  var obj = {};
-                  obj.product = prod.productId;
-                  obj.sellQuantity = prod.purchasedQty;
-                  listTop.push(obj);
+            if (status)
+              if (status.type === "delivered") {
+                for (let prod of order.productDetail) {
+                  if (prod.productId === null) continue;
+                  var index = listTop.findIndex(
+                    (product) =>
+                      String(product.product) === String(prod.productId)
+                  );
+                  if (index !== -1) {
+                    listTop[index].sellQuantity =
+                      listTop[index].sellQuantity + prod.purchasedQty;
+                  } else {
+                    var obj = {};
+                    obj.product = prod.productId;
+                    obj.sellQuantity = prod.purchasedQty;
+                    listTop.push(obj);
+                  }
                 }
               }
-            }
           }
           const data = listTop
             .sort((a, b) => b.value - a.value)
