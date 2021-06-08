@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 //Admin
 exports.requireSignin = (req, res, next) => {
   if (req.headers.authorization) {
-    // const token = req.headers.authorization.split(" ")[1];
-    const token = req.headers.authorization;
+    const token = req.headers.authorization.split(" ")[1];
+    
+    // const token = req.headers.authorization;
     try {
       const admin = jwt.verify(token, process.env.JWT_SECRET);
       req.admin = admin;
@@ -36,8 +37,8 @@ exports.superAdminMiddleware = (req, res, next) => {
 //Customers
 exports.requireSigninCustomer = (req, res, next) => {
   if (req.headers.authorization) {
-    const token = req.headers.authorization;
-    // const token = req.headers.authorization.split(" ")[1];
+    // const token = req.headers.authorization;
+    const token = req.headers.authorization.split(" ")[1];
     try {
       const customer = jwt.verify(token, process.env.JWT_SECRET);
       req.customer = customer;
