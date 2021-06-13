@@ -37,10 +37,11 @@ exports.addBrand = (req, res) => {
 
 exports.getBrands = (req, res) => {
   Brand.find({}).exec((error, brands) => {
-    if (error) return res.status(400).json({ error });
+    if (error)
+      return res.status(400).json({ success: false, statusCode: 400, error });
     if (brands) {
       const brandList = createBrands(brands);
-      res.status(200).json({ data: brandList });
+      res.status(200).json({ success: true, statusCode: 200, data: brandList });
     }
   });
 };

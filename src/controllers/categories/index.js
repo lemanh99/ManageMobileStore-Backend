@@ -37,10 +37,13 @@ exports.addCategory = (req, res) => {
 
 exports.getCategories = (req, res) => {
   Category.find({}).exec((error, categories) => {
-    if (error) return res.status(400).json({ error });
+    if (error)
+      return res.status(400).json({ success: false, statusCode: 400, error });
     if (categories) {
       const categoryList = createCategories(categories);
-      res.status(200).json({ data: categoryList });
+      res
+        .status(200)
+        .json({ success: true, statusCode: 200, data: categoryList });
     }
   });
 };

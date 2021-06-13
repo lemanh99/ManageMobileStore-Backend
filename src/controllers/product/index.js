@@ -26,10 +26,13 @@ function createProducts(products) {
 
 exports.getProducts = (req, res) => {
   Product.find({}).exec((error, products) => {
-    if (error) return res.status(400).json({ error });
+    if (error)
+      return res.status(400).json({ success: false, statusCode: 400, error });
     if (products) {
       const productList = createProducts(products);
-      res.status(200).json({ data: productList });
+      res
+        .status(200)
+        .json({ success: true, statusCode: 200, data: productList });
     }
   });
 };
@@ -88,13 +91,16 @@ exports.getProductDetailsById = (req, res) => {
   const { id } = req.params;
   if (id) {
     Product.findOne({ _id: id }).exec((error, product) => {
-      if (error) return res.status(400).json({ error });
+      if (error)
+        return res.status(400).json({ success: false, statusCode: 400, error });
       if (product) {
-        res.status(200).json({ data: product });
+        res.status(200).json({ success: true, statusCode: 200, data: product });
       }
     });
   } else {
-    return res.status(400).json({ error: "Params required" });
+    return res
+      .status(400)
+      .json({ success: false, statusCode: 400, error: "Params required" });
   }
 };
 
@@ -102,13 +108,16 @@ exports.getProductDetailsByBrand = (req, res) => {
   const { id } = req.params;
   if (id) {
     Product.find({ brandId: id }).exec((error, product) => {
-      if (error) return res.status(400).json({ error });
+      if (error)
+        return res.status(400).json({ success: false, statusCode: 400, error });
       if (product) {
-        res.status(200).json({ data: product });
+        res.status(200).json({ success: true, statusCode: 200, data: product });
       }
     });
   } else {
-    return res.status(400).json({ error: "Params required" });
+    return res
+      .status(400)
+      .json({ success: false, statusCode: 400, error: "Params required" });
   }
 };
 
@@ -122,17 +131,22 @@ exports.getProductDetailsByCategory = (req, res) => {
         populate: { path: "categoryId", select: "_id" },
       })
       .exec((error, product) => {
-        if (error) return res.status(400).json({ error });
+        if (error)
+          return res
+            .status(400)
+            .json({ success: false, statusCode: 400, error });
         if (product) {
           const data = product.filter(
             (product) => String(product.brandId.categoryId._id) === String(id)
           );
 
-          res.status(200).json({ data: data });
+          res.status(200).json({ success: true, statusCode: 200, data: data });
         }
       });
   } else {
-    return res.status(400).json({ error: "Params required" });
+    return res
+      .status(400)
+      .json({ success: false, statusCode: 400, error: "Params required" });
   }
 };
 
@@ -193,13 +207,16 @@ exports.deleteProductById = (req, res) => {
 
 exports.searchProducts = (req, res) => {
   const name = req.query.name;
-  const query = new RegExp(".*"+name+ ".*");
+  const query = new RegExp(".*" + name + ".*");
   console.log(query);
   // Product.find({"name": /.*name.*/}).exec((error, product) => {
-  Product.find({ "name": {"$regex":query, "$options": "i"}}).exec((error, product) => {
-    if (error) return res.status(400).json({ error });
-    if (product) {
-      res.status(200).json({ data: product });
+  Product.find({ name: { $regex: query, $options: "i" } }).exec(
+    (error, product) => {
+      if (error)
+        return res.status(400).json({ success: false, statusCode: 400, error });
+      if (product) {
+        res.status(200).json({ success: true, statusCode: 200, data: product });
+      }
     }
-  });
+  );
 };

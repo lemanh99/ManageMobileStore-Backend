@@ -42,7 +42,8 @@ exports.addOrder = async (req, res) => {
     ];
     const order = new Order(req.body);
     order.save((error, order) => {
-      if (error) return res.status(400).json({ error });
+      if (error)
+        return res.status(400).json({ success: false, statusCode: 400, error });
       if (order) {
         for (let product of order.productDetail) {
           Product.findOne({ _id: product.productId }).exec((error, prod) => {
@@ -54,11 +55,11 @@ exports.addOrder = async (req, res) => {
             }
           });
         }
-        return res.status(201).json({ order });
+        return res.status(201).json({ success: true, statusCode: 201, order });
       }
     });
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({ success: false, statusCode: 400, error });
   }
 
   // }
@@ -80,9 +81,10 @@ exports.getOrdersByCustomers = (req, res) => {
     .select("_id codeBill paymentStatus paymentType orderStatus productDetail")
     .populate("productDetail.productId", "_id name productPictures")
     .exec((error, orders) => {
-      if (error) return res.status(400).json({ error });
+      if (error)
+        return res.status(400).json({ success: false, statusCode: 400, error });
       if (orders) {
-        res.status(200).json({ orders });
+        res.status(200).json({ success: true, statusCode: 200, orders });
       }
     });
 };
@@ -92,16 +94,24 @@ exports.getOrder = (req, res) => {
     .populate("items.productId", "_id name productPictures")
     .lean()
     .exec((error, order) => {
-      if (error) return res.status(400).json({ error });
+      if (error)
+        return res.status(400).json({ success: false, statusCode: 400, error });
       if (order) {
         Address.findOne({
           user: req.user._id,
         }).exec((error, address) => {
-          if (error) return res.status(400).json({ error });
+          if (error)
+            return res.status(400).json({
+              success: false,
+              statusCode: 400,
+              error,
+            });
           order.address = address.address.find(
             (adr) => adr._id.toString() == order.addressId.toString()
           );
           res.status(200).json({
+            success: true,
+            statusCode: 200,
             order,
           });
         });
@@ -137,9 +147,13 @@ exports.confirmShiped = async (req, res) => {
         new: true,
       }
     );
-    return res.status(201).json({ data: updatedOrder });
+    return res
+      .status(201)
+      .json({ success: true, statusCode: 200, data: updatedOrder });
   } else {
-    return res.status(400).json({ error: "No ID" });
+    return res
+      .status(400)
+      .json({ success: false, statusCode: 400, error: "No ID" });
   }
 };
 
@@ -172,9 +186,13 @@ exports.confirmDevivered = async (req, res) => {
         new: true,
       }
     );
-    return res.status(201).json({ data: updatedOrder });
+    return res
+      .status(201)
+      .json({ success: true, statusCode: 201, data: updatedOrder });
   } else {
-    return res.status(400).json({ error: "No ID" });
+    return res
+      .status(400)
+      .json({ success: false, statusCode: 400, error: "No ID" });
   }
 };
 
@@ -207,11 +225,16 @@ exports.confirmCancel = async (req, res) => {
         new: true,
       }
     );
-    return res
-      .status(201)
-      .json({ data: updatedOrder, message: "Cancel completed" });
+    return res.status(201).json({
+      success: true,
+      statusCode: 201,
+      data: updatedOrder,
+      message: "Cancel completed",
+    });
   } else {
-    return res.status(400).json({ error: "No ID" });
+    return res
+      .status(400)
+      .json({ success: false, statusCode: 400, error: "No ID" });
   }
 };
 

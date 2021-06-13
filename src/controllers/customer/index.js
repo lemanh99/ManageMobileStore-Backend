@@ -23,11 +23,17 @@ exports.signup = (req, res) => {
         });
         _customer.save((error, data) => {
           if (error) {
-            return res.status(400).json({ error: error });
+            return res.status(400).json({
+              success: false,
+              statusCode: 400,
+              error: error,
+            });
           }
 
           if (data) {
             return res.status(201).json({
+              success: true,
+              statusCode: 201,
               message: "Customer Created Successfully!",
             });
           }
@@ -35,7 +41,11 @@ exports.signup = (req, res) => {
       });
     });
   } catch (error) {
-    return res.status(400).json({ error: "Error connected" });
+    return res.status(400).json({
+      success: false,
+      statusCode: 400,
+      error: "Error connected",
+    });
   }
 };
 
@@ -68,6 +78,8 @@ exports.signin = (req, res) => {
             } = user;
             res.cookie("token-user", token, { expiresIn: "1d" });
             return res.status(200).json({
+              success: true,
+              statusCode: 200,
               token,
               user: {
                 _id,
@@ -82,28 +94,40 @@ exports.signin = (req, res) => {
             });
           } else {
             return res.status(204).json({
+              success: true,
+              statusCode: 204,
               error: "The account has been locked",
             });
           }
         } else {
-          return res
-            .status(400)
-            .json({ error: "Please provide a valid username and password" });
+          return res.status(400).json({
+            success: false,
+            statusCode: 400,
+            error: "Please provide a valid username and password",
+          });
         }
       } else {
         return res.status(400).json({
+          success: false,
+          statusCode: 400,
           error: "Please provide a valid username and password",
         });
       }
     });
   } catch (error) {
-    return res.status(400).json({ error });
+    return res.status(400).json({
+      success: false,
+      statusCode: 400,
+      error,
+    });
   }
 };
 
 exports.signout = (req, res) => {
   res.clearCookie("token-user");
   res.status(200).json({
+    success: true,
+    statusCode: 200,
     message: "Signout successfully!",
   });
 };

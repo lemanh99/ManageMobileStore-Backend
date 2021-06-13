@@ -43,10 +43,10 @@ exports.requireSigninCustomer = (req, res, next) => {
       const customer = jwt.verify(token, process.env.JWT_SECRET);
       req.customer = customer;
     } catch (error) {
-      return res.status(400).json({ error: "Outdated Token" });
+      return res.status(400).json({ success: false, statusCode: 400, error: "Outdated Token" });
     }
   } else {
-    return res.status(400).json({ error: "Authentication required" });
+    return res.status(400).json({ success: false, statusCode: 400, error: "Authentication required" });
   }
 
   next();
